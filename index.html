@@ -1,0 +1,60 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sketch Classification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js" type="text/javascript"></script>
+  
+  
+    
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+  <center>
+<!-- Modal -->
+<div id="myModal" class="modal fade">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">Sketches</h4>
+    </div>
+
+    <div class="modal-body">
+      <img src="sketch1.png">
+      <img src="sketch2.png">
+    </div>
+
+  </div>
+</div>
+
+<h1>Quick Draw
+<button id="show_sketch" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+  <!--DO NOT CHANGE-->
+<img id="ss" src="data:image/png;base64,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">
+</button>
+  </h1>
+
+  <p id="label">Label : </p>
+  <p id="confidence">Accuracy : </p>
+
+  <br>
+
+  <button class="btn btn-danger" onclick="clearCanvas()">Clear Canvas</button>
+  <p id="timer">Timer:</p> 
+  <br>
+  <p id="score">Score:</p>
+  
+</center> 
+<script src="main.js"></script>
+</body>
+
+</html>
